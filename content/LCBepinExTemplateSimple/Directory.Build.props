@@ -28,4 +28,10 @@
     <SolutionRoot>$(MSBuildThisFileDirectory)</SolutionRoot>
   </PropertyGroup>
 
+  <!-- MinVer -->
+  <PropertyGroup>
+      <MinVerDefaultPreReleaseIdentifiers>dev</MinVerDefaultPreReleaseIdentifiers>
+      <MinVerTagPrefix>v</MinVerTagPrefix>
+  </PropertyGroup>
+
 </Project>

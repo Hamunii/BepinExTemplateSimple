@@ -19,6 +19,11 @@
       Version="69.0.1-ngd.0"
       Private="False"
       PrivateAssets="all" />
+
+    <PackageReference Include="MinVer" Version="4.3.0">
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
   </ItemGroup>
 
   <Target Name="AddGeneratedFile" BeforeTargets="BeforeCompile;CoreCompile"
@@ -47,6 +52,21 @@ internal static class LCMPluginInfo
     <WriteLinesToFile Lines="$(GeneratedText)" File="$(GeneratedFilePath)"
         WriteOnlyWhenDifferent="true" Overwrite="true" />
 
+  </Target>
+
+  <!-- Call with `dotnet build -target:PackThunderstore` -->
+  <Target Name="PackThunderstore" DependsOnTargets="PostBuildEvent;SetPluginVersion">
+    <Exec Command="dotnet tool restore" />
+    <Exec Command="dotnet tcli build --config-path &quot;$(ProjectDir)Thunderstore/thunderstore.toml&quot; --package-version $(PlainVersion)" />
+    <ItemGroup>
+      <FilesToRename Include="$(ProjectDir)dist/*-$(PlainVersion).zip" />
+    </ItemGroup>
+    <Move SourceFiles="@(FilesToRename)" DestinationFiles="@(FilesToRename -&gt; Replace($(PlainVersion), $(MinVerVersion)))" />
+  </Target>
+
+  <!-- This is manually called by the github actions publish workflow -->
+  <Target Name="PublishThunderstore" DependsOnTargets="PackThunderstore">
+    <Exec Command="dotnet tcli publish --config-path &quot;$(ProjectDir)Thunderstore/thunderstore.toml&quot; --file &quot;$(SolutionDir)artifacts/thunderstore/Zehs-REPOLib-$(MinVerVersion).zip&quot;" />
   </Target>
 
 </Project>

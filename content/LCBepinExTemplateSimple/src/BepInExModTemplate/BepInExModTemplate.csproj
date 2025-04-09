@@ -4,7 +4,7 @@
 
     <AssemblyName>BepInExModTemplate</AssemblyName>
     <Product>$(AssemblyName)</Product>
-    <Version>1.0.0</Version>
+    <!-- </Version> is handled by MinVer -->
 
   </PropertyGroup>
 
