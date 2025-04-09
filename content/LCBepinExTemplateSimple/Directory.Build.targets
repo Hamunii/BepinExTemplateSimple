@@ -54,6 +54,14 @@ internal static class LCMPluginInfo
 
   </Target>
 
+  <!-- Target 'AddGeneratedFile' is from BepInEx.PluginInfoProps -->
+  <Target Name="SetPluginVersion" BeforeTargets="AddGeneratedFile" DependsOnTargets="MinVer">
+      <PropertyGroup>
+          <PlainVersion>$(MinVerMajor).$(MinVerMinor).$(MinVerPatch)</PlainVersion>
+          <BepInExPluginVersion>$(PlainVersion)</BepInExPluginVersion>
+      </PropertyGroup>
+  </Target>
+
   <!-- Call with `dotnet build -target:PackThunderstore` -->
   <Target Name="PackThunderstore" DependsOnTargets="PostBuildEvent;SetPluginVersion">
     <Exec Command="dotnet tool restore" />
